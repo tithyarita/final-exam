@@ -1,0 +1,21 @@
+# OS
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Maven & Java
+demo/target/
+demo/*.log
+*.class
+*.jar
+*.war
+
+# MySQL
+demo/oglevel
+
+# Test files
+docker_test.html
