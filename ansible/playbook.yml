@@ -1,0 +1,91 @@
+---
+- name: CI/CD Pipeline - Deploy ID Card Management System
+  hosts: web_server
+  gather_facts: true
+
+  vars:
+    project_dir: /app
+    backup_dir: /root/backups
+    db_name: A-NETH_Tithyarita-db
+    db_user: root
+    db_pass: root
+
+  tasks:
+    - name: Ensure Python3 is installed
+      raw: which python3 || apt install -y python3 python3-pip
+      tags: setup
+
+    - name: Ensure required tools are installed
+      apt:
+        name:
+          - git
+          - maven
+          - mysql-client
+        state: present
+        update_cache: yes
+      tags: setup
+
+    - name: Step 1 - Git pull latest code
+      git:
+        repo: 'https://github.com/tithyarita/final-exam.git'
+        dest: "{{ project_dir }}"
+        force: yes
+        accept_hostkey: yes
+      tags: git_pull
+      register: git_result
+
+    - name: Show git pull result
+      debug:
+        msg: "Git pull: {{ git_result.before | default('N/A') }} -> {{ git_result.after | default('N/A') }}"
+      tags: git_pull
+
+    - name: Step 2 - Build project with Maven
+      shell:
+        cmd: ./mvnw clean package -DskipTests
+        chdir: "{{ project_dir }}"
+      environment:
+        JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
+      tags: build
+      register: maven_build
+
+    - name: Show Maven build result
+      debug:
+        msg: "Maven build completed successfully"
+      when: maven_build.rc is defined and maven_build.rc == 0
+      tags: build
+
+    - name: Step 3 - Run tests against SQLite (test profile)
+      shell:
+        cmd: ./mvnw test -Dspring.profiles.active=test
+        chdir: "{{ project_dir }}"
+      environment:
+        JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
+      tags: test
+      register: test_result
+      ignore_errors: false
+
+    - name: Show test results summary
+      debug:
+        msg: "Tests completed. Check output above for details."
+      tags: test
+      when: test_result.rc is defined and test_result.rc == 0
+
+    - name: Step 4 - Create backup directory
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: '0755'
+      tags: backup
+
+    - name: Step 4 - Backup MySQL database via docker exec
+      shell: |
+        mysqldump -h mysql -u {{ db_user }} -p'{{ db_pass }}' {{ db_name }} > {{ backup_dir }}/{{ db_name }}_{{ ansible_date_time.epoch }}.sql
+      tags: backup
+      register: backup_result
+      ignore_errors: true
+
+    - name: Show backup result
+      debug:
+        msg: "Database backup saved to {{ backup_dir }}/{{ db_name }}_{{ ansible_date_time.epoch }}.sql"
+      tags: backup
+      when: backup_result.rc is defined and backup_result.rc == 0

@@ -4,33 +4,37 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Bangkok
 
-# Install dependencies: JDK 21, NGINX, SSH, curl
-RUN apt-get update && apt-get install -y \
-    openjdk-21-jdk \
+# Install dependencies: JDK 21, NGINX, SSH, MySQL client, Git, Maven, Python, Ansible
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
+    apt-get install -y \
+    openjdk-21-jdk maven \
     nginx \
     openssh-server \
-    curl \
+    mysql-client \
+    git curl python3 python3-pip python3-venv \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* && \
+    ln -fs /usr/share/zoneinfo/Asia/Bangkok /etc/localtime && \
+    pip3 install ansible --break-system-packages 2>/dev/null || true
 
-# Create app directory
+# Create app directory and copy pre-built JAR
 WORKDIR /app
-
-# Copy the pre-built JAR from local target folder
 COPY demo/target/demo-0.0.1-SNAPSHOT.jar /app/app.jar
 
-# Copy nginx config
-COPY nginx/default.conf /etc/nginx/sites-available/default
+# Remove default nginx config (port 80)
+RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
 
-# Enable nginx site
-RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/ && \
-    rm -f /etc/nginx/sites-enabled/default
+# Copy nginx config (listens on 8080, proxies to Spring Boot 8081)
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # SSH setup - allow root login with password
-RUN mkdir /var/run/sshd && \
+RUN mkdir -p /var/run/sshd && \
     echo 'root:root' | chpasswd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# Copy Ansible playbook and inventory
+COPY ansible /app/ansible
 
 # Copy startup script
 COPY start.sh /start.sh
