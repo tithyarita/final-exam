@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ID Card Management - Profiles</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header h1 { color: #333; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 14px; }
+        .btn-primary { background: #1877f2; color: white; }
+        .btn-success { background: #42b72a; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        .alert { padding: 12px; border-radius: 5px; margin-bottom: 15px; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th { background: #1877f2; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f5f5f5; }
+        .actions { display: flex; gap: 5px; }
+        .badge { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: white; }
+        .badge-student { background: #1877f2; }
+        .badge-employee { background: #42b72a; }
+        .badge-user { background: #f39c12; }
+        .photo-thumb { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ID Card Management</h1>
+            <div>
+                <a th:href="@{/profiles/create}" class="btn btn-primary">+ New Profile</a>
+                <a th:href="@{/profiles/batch}" class="btn btn-success">Batch Generate</a>
+            </div>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="profile : ${profiles}">
+                    <td>
+                        <img th:if="${profile.photoBase64 != null}" th:src="'data:image/jpeg;base64,' + ${profile.photoBase64}" class="photo-thumb" alt="Photo"/>
+                        <span th:unless="${profile.photoBase64 != null}">No Photo</span>
+                    </td>
+                    <td th:text="${profile.uniqueId}"></td>
+                    <td th:text="${profile.firstName} + ' ' + ${profile.lastName}"></td>
+                    <td th:text="${profile.email}"></td>
+                    <td th:text="${profile.department}"></td>
+                    <td><span class="badge" th:classappend="'badge-' + ${#strings.toLowerCase(profile.profileType)}" th:text="${profile.profileType}"></span></td>
+                    <td th:text="${profile.active ? 'Active' : 'Inactive'}"></td>
+                    <td>
+                        <div class="actions">
+                            <a th:href="@{/profiles/{id}(id=${profile.id})}" class="btn btn-primary btn-sm">View</a>
+                            <a th:href="@{/profiles/{id}/preview(id=${profile.id})}" class="btn btn-warning btn-sm">Preview</a>
+                            <a th:href="@{/profiles/edit/{id}(id=${profile.id})}" class="btn btn-sm" style="background:#6c757d;color:white;">Edit</a>
+                            <a th:href="@{/profiles/{id}/pdf(id=${profile.id})}" class="btn btn-success btn-sm">PDF</a>
+                            <form th:action="@{/profiles/delete/{id}(id=${profile.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this profile?')">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(profiles)}">
+                    <td colspan="8" style="text-align:center;color:#999;padding:20px;">
+                        No profiles found. <a th:href="@{/profiles/create}">Create one</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

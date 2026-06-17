@@ -1,0 +1,66 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.1)
+
+2026-06-17T16:35:18.311+07:00  INFO 19192 --- [demo] [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.9 with PID 19192 (D:\i4\s2\DevOp\final-exam\demo\target\demo-0.0.1-SNAPSHOT.jar started by User in d:\i4\s2\DevOp\final-exam\demo)
+2026-06-17T16:35:18.314+07:00  INFO 19192 --- [demo] [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+2026-06-17T16:35:19.468+07:00  INFO 19192 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-17T16:35:19.556+07:00  INFO 19192 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 72 ms. Found 2 JPA repository interfaces.
+2026-06-17T16:35:20.722+07:00  INFO 19192 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8088 (http)
+2026-06-17T16:35:20.759+07:00  INFO 19192 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-17T16:35:20.760+07:00  INFO 19192 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-06-17T16:35:20.827+07:00  INFO 19192 --- [demo] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-17T16:35:20.828+07:00  INFO 19192 --- [demo] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2460 ms
+2026-06-17T16:35:21.131+07:00  INFO 19192 --- [demo] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-17T16:35:21.225+07:00  INFO 19192 --- [demo] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.4.Final
+2026-06-17T16:35:21.297+07:00  INFO 19192 --- [demo] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-17T16:35:21.774+07:00  INFO 19192 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-17T16:35:21.826+07:00  INFO 19192 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-17T16:35:22.550+07:00  INFO 19192 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@45707f76
+2026-06-17T16:35:22.552+07:00  INFO 19192 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-17T16:35:22.609+07:00  WARN 19192 --- [demo] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-17T16:35:22.628+07:00  INFO 19192 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.45
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-17T16:35:23.590+07:00  INFO 19192 --- [demo] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-17T16:35:23.696+07:00  INFO 19192 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-17T16:35:24.166+07:00  WARN 19192 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-17T16:35:24.858+07:00  INFO 19192 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8088 (http) with context path '/'
+2026-06-17T16:35:24.877+07:00  INFO 19192 --- [demo] [           main] com.example.demo.DemoApplication         : Started DemoApplication in 7.159 seconds (process running for 7.903)
+2026-06-17T16:35:26.151+07:00  INFO 19192 --- [demo] [nio-8088-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-17T16:35:26.152+07:00  INFO 19192 --- [demo] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-17T16:35:26.156+07:00  INFO 19192 --- [demo] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id from profiles p1_0 where p1_0.email=? limit ?
+Hibernate: insert into profiles (active,address,created_at,department,email,first_name,last_name,phone,photo,profile_type,unique_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select p1_0.id,p1_0.active,p1_0.address,p1_0.created_at,p1_0.department,p1_0.email,p1_0.first_name,p1_0.last_name,p1_0.phone,p1_0.photo,p1_0.profile_type,p1_0.unique_id,p1_0.updated_at from profiles p1_0
+Hibernate: select p1_0.id,p1_0.active,p1_0.address,p1_0.created_at,p1_0.department,p1_0.email,p1_0.first_name,p1_0.last_name,p1_0.phone,p1_0.photo,p1_0.profile_type,p1_0.unique_id,p1_0.updated_at from profiles p1_0
+Hibernate: select p1_0.id,p1_0.active,p1_0.address,p1_0.created_at,p1_0.department,p1_0.email,p1_0.first_name,p1_0.last_name,p1_0.phone,p1_0.photo,p1_0.profile_type,p1_0.unique_id,p1_0.updated_at from profiles p1_0

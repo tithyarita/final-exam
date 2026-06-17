@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ID Card Preview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 500px; }
+        h1 { color: #333; margin-bottom: 20px; text-align: center; }
+        .id-card {
+            width: 380px;
+            min-height: 600px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            padding: 25px;
+            border: 2px solid #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+        .id-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #1877f2, #42b72a);
+        }
+        .card-header { text-align: center; margin-bottom: 15px; padding-top: 5px; }
+        .card-header h2 { color: #333; font-size: 18px; letter-spacing: 2px; }
+        .card-type {
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-top: 5px;
+        }
+        .type-student { background: #1877f2; }
+        .type-employee { background: #42b72a; }
+        .type-user { background: #f39c12; }
+
+        .card-photo {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .card-photo img {
+            width: 130px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #1877f2;
+        }
+        .card-photo .no-photo {
+            width: 130px;
+            height: 150px;
+            background: #eee;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: #bbb;
+            border: 2px dashed #ccc;
+        }
+
+        .card-details { margin: 15px 0; }
+        .card-row { display: flex; padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
+        .card-label { width: 90px; color: #888; font-size: 12px; font-weight: bold; }
+        .card-value { flex: 1; color: #333; font-size: 14px; font-weight: bold; }
+
+        .card-qr { text-align: center; margin-top: 15px; }
+        .card-qr img { width: 80px; height: 80px; }
+
+        .actions { margin-top: 25px; display: flex; gap: 10px; justify-content: center; }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-success { background: #42b72a; color: white; }
+        .btn-primary { background: #1877f2; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .back-link { margin-top: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ID Card Preview</h1>
+
+        <div class="id-card" id="idCard">
+            <div class="card-header">
+                <h2>ID CARD</h2>
+                <span class="card-type" th:classappend="'type-' + ${#strings.toLowerCase(profile.profileType)}" th:text="${profile.profileType}"></span>
+            </div>
+
+            <div class="card-photo">
+                <img th:if="${photoBase64}" th:src="'data:image/jpeg;base64,' + ${photoBase64}" alt="Photo"/>
+                <div th:unless="${photoBase64}" class="no-photo">&#128100;</div>
+            </div>
+
+            <div class="card-details">
+                <div class="card-row">
+                    <span class="card-label">ID:</span>
+                    <span class="card-value" th:text="${profile.uniqueId}"></span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">Name:</span>
+                    <span class="card-value" th:text="${profile.firstName} + ' ' + ${profile.lastName}"></span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">Dept:</span>
+                    <span class="card-value" th:text="${profile.department ?: 'N/A'}"></span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">Email:</span>
+                    <span class="card-value" th:text="${profile.email}"></span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">Phone:</span>
+                    <span class="card-value" th:text="${profile.phone ?: 'N/A'}"></span>
+                </div>
+            </div>
+
+            <div class="card-qr" th:if="${qrCodeBase64}">
+                <img th:src="'data:image/png;base64,' + ${qrCodeBase64}" alt="QR Code"/>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="window.print()">🖨 Print</button>
+            <a th:href="@{/profiles/{id}/pdf(id=${profile.id})}" class="btn btn-success">📄 Download PDF</a>
+            <a th:href="@{/profiles/{id}(id=${profile.id})}" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</body>
+</html>

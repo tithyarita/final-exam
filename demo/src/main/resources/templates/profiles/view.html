@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Profile</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; margin-bottom: 20px; }
+        .card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .profile-photo { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #1877f2; }
+        .profile-info h2 { color: #333; }
+        .profile-info .badge { padding: 5px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; color: white; display: inline-block; margin-top: 5px; }
+        .badge-student { background: #1877f2; }
+        .badge-employee { background: #42b72a; }
+        .badge-user { background: #f39c12; }
+        .details { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .detail-item { padding: 10px; border-bottom: 1px solid #eee; }
+        .detail-label { color: #888; font-size: 12px; text-transform: uppercase; }
+        .detail-value { color: #333; font-size: 16px; font-weight: bold; margin-top: 3px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 14px; margin-right: 10px; }
+        .btn-primary { background: #1877f2; color: white; }
+        .btn-success { background: #42b72a; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .actions { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Profile Details</h1>
+        <div class="card">
+            <div class="profile-header">
+                <div>
+                    <img th:if="${profile.photoBase64 != null}" th:src="'data:image/jpeg;base64,' + ${profile.photoBase64}" class="profile-photo" alt="Photo"/>
+                    <div th:unless="${profile.photoBase64 != null}" class="profile-photo" style="background:#ddd;display:flex;align-items:center;justify-content:center;font-size:40px;color:#999;">?</div>
+                </div>
+                <div class="profile-info">
+                    <h2 th:text="${profile.firstName} + ' ' + ${profile.lastName}"></h2>
+                    <span class="badge" th:classappend="'badge-' + ${#strings.toLowerCase(profile.profileType)}" th:text="${profile.profileType}"></span>
+                </div>
+            </div>
+
+            <div class="details">
+                <div class="detail-item">
+                    <div class="detail-label">Unique ID</div>
+                    <div class="detail-value" th:text="${profile.uniqueId}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value" th:text="${profile.active ? 'Active' : 'Inactive'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value" th:text="${profile.email}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value" th:text="${profile.phone ?: 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Department</div>
+                    <div class="detail-value" th:text="${profile.department ?: 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Type</div>
+                    <div class="detail-value" th:text="${profile.profileType}"></div>
+                </div>
+                <div class="detail-item" style="grid-column: span 2;">
+                    <div class="detail-label">Address</div>
+                    <div class="detail-value" th:text="${profile.address ?: 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Created At</div>
+                    <div class="detail-value" th:text="${#temporals.format(profile.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Updated At</div>
+                    <div class="detail-value" th:text="${#temporals.format(profile.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a th:href="@{/profiles/{id}/preview(id=${profile.id})}" class="btn btn-warning">Preview ID Card</a>
+                <a th:href="@{/profiles/{id}/pdf(id=${profile.id})}" class="btn btn-success">Download PDF</a>
+                <a th:href="@{/profiles/edit/{id}(id=${profile.id})}" class="btn btn-primary">Edit</a>
+                <a th:href="@{/profiles}" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
