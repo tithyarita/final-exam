@@ -4,12 +4,13 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Bangkok
 
-# Install dependencies: JDK 21, NGINX, SSH, curl
+# Install dependencies: JDK 21, NGINX, SSH, curl, mysql-client
 RUN apt-get update && apt-get install -y \
     openjdk-21-jdk \
     nginx \
     openssh-server \
     curl \
+    mysql-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -19,12 +20,11 @@ WORKDIR /app
 # Copy the pre-built JAR from local target folder
 COPY demo/target/demo-0.0.1-SNAPSHOT.jar /app/app.jar
 
-# Copy nginx config
-COPY nginx/default.conf /etc/nginx/sites-available/default
+# Remove default nginx configs
+RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
 
-# Enable nginx site
-RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/ && \
-    rm -f /etc/nginx/sites-enabled/default
+# Copy nginx config
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # SSH setup - allow root login with password
 RUN mkdir /var/run/sshd && \

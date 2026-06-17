@@ -1,0 +1,3 @@
+CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS                   PORTS                                                                                  NAMES
+39c8d3cfe72a   final-exam-web   "/start.sh"              7 minutes ago   Up 7 minutes             0.0.0.0:2222->22/tcp, [::]:2222->22/tcp, 0.0.0.0:8443->8080/tcp, [::]:8443->8080/tcp   web-server
+b1bbb710f174   mysql:8.0        "docker-entrypoint.s…"   7 minutes ago   Up 7 minutes (healthy)   0.0.0.0:3307->3306/tcp, [::]:3307->3306/tcp                                            mysql-db
