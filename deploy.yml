@@ -1,0 +1,22 @@
+- hosts: web
+  become: yes
+
+  tasks:
+    - name: Stop running application (ignore if not running)
+      shell: pkill -f app.jar
+      ignore_errors: yes
+
+    - name: Create application folder
+      file:
+        path: /home/ubuntu/app
+        state: directory
+
+    - name: Copy JAR file to server
+      copy:
+        src: target/app.jar
+        dest: /home/ubuntu/app/app.jar
+
+    - name: Start Spring Boot app
+      shell: nohup java -jar /home/ubuntu/app/app.jar > app.log 2>&1 &
+      args:
+        chdir: /home/ubuntu/app
