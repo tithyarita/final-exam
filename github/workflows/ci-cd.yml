@@ -1,0 +1,64 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build project
+        run: mvn clean package
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Send email if build fails
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
+          subject: "❌ Build Failed - GitHub Actions"
+          to: srengty@gmail.com
+          cc: ${{ github.event.head_commit.author.email }}
+          from: GitHub Actions
+          body: |
+            Build failed in repository: ${{ github.repository }}
+
+            Commit: ${{ github.sha }}
+            Branch: ${{ github.ref }}
+
+            Author: ${{ github.event.head_commit.author.name }} <${{ github.event.head_commit.author.email }}>
+
+            Check logs: ${{ github.server_url }}/${{ github.repository }}/actions
+
+  deploy:
+    needs: build-test
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
+
+      - name: Run Ansible Playbook
+        run: ansible-playbook -i inventory.ini deploy.yml
